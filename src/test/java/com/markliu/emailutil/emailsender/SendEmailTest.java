@@ -80,7 +80,7 @@ public class SendEmailTest {
 		EmailServerService emailServerService = new EmailServerService();
 
 		// 如果登陆成功，则进行发送邮件
-		Session sendMailSession = emailServerService.loginEmailServer(emailServerInfo);
+		Session sendMailSession = emailServerService.loginEmailServer(emailServerInfo, false);
 		if (sendMailSession != null) {
 			System.out.println(emailServerInfo.getMailServerHost() + " 登陆成功！");
 			// 构建邮件 email
