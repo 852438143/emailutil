@@ -1,4 +1,4 @@
-package com.markliu.emailreader.javaxmail.entities;
+package com.markliu.emailutil.emailsender.entities;
 
 /**
  * 

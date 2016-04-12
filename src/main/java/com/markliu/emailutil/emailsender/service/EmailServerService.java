@@ -1,4 +1,4 @@
-package com.markliu.emailreader.javaxmail.service;
+package com.markliu.emailutil.emailsender.service;
 
 import java.io.File;
 import java.util.Date;
@@ -18,8 +18,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import com.markliu.emailreader.javaxmail.entities.EmailInfo;
-import com.markliu.emailreader.javaxmail.entities.EmailServerInfo;
+import com.markliu.emailutil.emailsender.entities.EmailInfo;
+import com.markliu.emailutil.emailsender.entities.EmailServerInfo;
 
 /**
  * 

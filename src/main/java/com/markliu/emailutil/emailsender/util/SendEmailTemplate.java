@@ -1,10 +1,10 @@
-package com.markliu.emailreader.javaxmail.util;
+package com.markliu.emailutil.emailsender.util;
 
 import javax.mail.Session;
 
-import com.markliu.emailreader.javaxmail.entities.EmailInfo;
-import com.markliu.emailreader.javaxmail.entities.EmailServerInfo;
-import com.markliu.emailreader.javaxmail.service.EmailServerService;
+import com.markliu.emailutil.emailsender.entities.EmailInfo;
+import com.markliu.emailutil.emailsender.entities.EmailServerInfo;
+import com.markliu.emailutil.emailsender.service.EmailServerService;
 
 /**
  * 

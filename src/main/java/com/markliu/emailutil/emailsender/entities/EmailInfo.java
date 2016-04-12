@@ -1,4 +1,4 @@
-package com.markliu.emailreader.javaxmail.entities;
+package com.markliu.emailutil.emailsender.entities;
 
 import java.io.File;
 import java.util.ArrayList;
