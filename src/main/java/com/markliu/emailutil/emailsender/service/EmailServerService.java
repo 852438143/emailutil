@@ -84,7 +84,7 @@ public class EmailServerService {
 			// Multipart is a container that holds multiple body parts.
 			Multipart bodyPartContainer = new MimeMultipart();  
             MimeBodyPart bodyPart = new MimeBodyPart();  
-            bodyPart.setContent(email.getContent(), "text/html;charset=gb2312");  
+            bodyPart.setContent(email.getContent(), "text/html; charset=UTF-8");  
             bodyPartContainer.addBodyPart(bodyPart);    
             if(!email.getAttachmentFiles().isEmpty()){ // 存在附件  
                 for(File file : email.getAttachmentFiles()) { // 遍历所有的附件

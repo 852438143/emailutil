@@ -34,8 +34,26 @@ public class SendEmailTest {
 		// 构建邮件 email
 		EmailInfo email = new EmailInfo();
 		String[] toes = {"1291833546@qq.com", "2051459265@qq.com"};
-		email.setToAddress(toes).setSubject("test 主题2")
-				.setContent("this is content内容!");
+		email.setToAddress(toes).setSubject("test 主题2");
+		
+		StringBuffer content = new StringBuffer();
+		
+		// 发送链接有的邮箱服务器可能将此邮件识别为垃圾邮件。
+		content.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">")  
+        .append("<html>")  
+        .append("<head>")  
+        .append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">")  
+        .append("<title>测试邮件</title>")  
+        .append("<style type=\"text/css\">")  
+        .append(".test{font-family:\"Microsoft Yahei\";font-size: 18px;color: red;}")  
+        .append("</style>")  
+        .append("</head>")  
+        .append("<body>")
+        .append("<h2><font color=red>Header标题</font></h2><br/>")
+        .append("<span class=\"test\">this is content!内容</span>")  
+        .append("</body>")
+        .append("</html>");  
+		email.setContent(content.toString());
 		
 		// 设置上传的附件
 		File file1 = new File("E:\\Photos\\bob.jpeg");
