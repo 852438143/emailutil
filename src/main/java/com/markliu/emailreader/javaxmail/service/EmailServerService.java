@@ -71,8 +71,12 @@ public class EmailServerService {
 			mailMessage.setFrom(from);
 			
 			// 创建邮件的接收者地址，并设置到邮件消息中
-			Address to = new InternetAddress(email.getToAddress());
-			mailMessage.setRecipient(Message.RecipientType.TO, to);
+			String[] toAddresseStrings = email.getToAddress();
+			Address[] toAddresse = new InternetAddress[toAddresseStrings.length];
+			for(int i = 0 ; i < toAddresseStrings.length; i++) {
+				toAddresse[i] = new InternetAddress(toAddresseStrings[i]);
+			}
+			mailMessage.setRecipients(Message.RecipientType.TO, toAddresse);
 			
 			// 设置邮件消息的主题
 			mailMessage.setSubject(email.getSubject());

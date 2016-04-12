@@ -36,7 +36,8 @@ public class SendEmailTest {
 		
 		// 构建邮件 email
 		EmailInfo email = new EmailInfo();
-		email.setToAddress("1291833546@qq.com").setSubject("test 主题2")
+		String[] toes = {"1291833546@qq.com", "2051459265@qq.com"};
+		email.setToAddress(toes).setSubject("test 主题2")
 				.setContent("this is content内容!");
 		
 		// 设置上传的附件
@@ -69,8 +70,9 @@ public class SendEmailTest {
 			System.out.println(emailServerInfo.getMailServerHost() + " 登陆成功！");
 			// 构建邮件 email
 			EmailInfo email = new EmailInfo();
-			email.setToAddress("1291833546@qq.com").setSubject("test 主题2")
-					.setContent("<b>this is content!</b>");
+			String[] toes = {"1291833546@qq.com", "2051459265@qq.com"};
+			email.setToAddress(toes).setSubject("test 主题2")
+					.setContent("this is content内容!");
 			boolean result = emailServerService.sendEmail(sendMailSession, emailServerInfo, email);
 			if (result) {
 				System.out.println("发送成功！");

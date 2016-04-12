@@ -15,7 +15,7 @@ public class EmailInfo {
 	/**
 	 * 接收方的邮箱地址
 	 */
-	private String toAddress;
+	private String[] toAddress;
 
 	/**
 	 * 邮件主题
@@ -35,11 +35,11 @@ public class EmailInfo {
 	public EmailInfo() {
 	}
 
-	public String getToAddress() {
+	public String[] getToAddress() {
 		return toAddress;
 	}
 
-	public EmailInfo setToAddress(String toAddress) {
+	public EmailInfo setToAddress(String[] toAddress) {
 		this.toAddress = toAddress;
 		return this;
 	}
