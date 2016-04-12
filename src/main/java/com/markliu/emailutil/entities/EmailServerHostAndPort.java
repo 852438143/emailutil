@@ -1,4 +1,4 @@
-package com.markliu.emailutil.emailsender.entities;
+package com.markliu.emailutil.entities;
 
 /**
  * 

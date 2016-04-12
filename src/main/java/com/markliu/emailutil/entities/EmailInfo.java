@@ -1,4 +1,4 @@
-package com.markliu.emailutil.emailsender.entities;
+package com.markliu.emailutil.entities;
 
 import java.io.File;
 import java.util.ArrayList;

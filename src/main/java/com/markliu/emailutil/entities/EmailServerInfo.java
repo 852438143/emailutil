@@ -1,4 +1,4 @@
-package com.markliu.emailutil.emailsender.entities;
+package com.markliu.emailutil.entities;
 
 /**
  * 登陆的邮箱服务器的信息，包括服务器的 host 和 ip，用户名和密码等

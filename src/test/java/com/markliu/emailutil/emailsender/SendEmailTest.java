@@ -7,11 +7,11 @@ import javax.mail.Session;
 
 import org.junit.Test;
 
-import com.markliu.emailutil.emailsender.entities.EmailInfo;
-import com.markliu.emailutil.emailsender.entities.EmailServerHostAndPort;
-import com.markliu.emailutil.emailsender.entities.EmailServerInfo;
-import com.markliu.emailutil.emailsender.service.EmailServerService;
-import com.markliu.emailutil.emailsender.util.SendEmailTemplate;
+import com.markliu.emailutil.entities.EmailInfo;
+import com.markliu.emailutil.entities.EmailServerHostAndPort;
+import com.markliu.emailutil.entities.EmailServerInfo;
+import com.markliu.emailutil.service.EmailServerService;
+import com.markliu.emailutil.util.SendEmailTemplate;
 
 /**
  * 
