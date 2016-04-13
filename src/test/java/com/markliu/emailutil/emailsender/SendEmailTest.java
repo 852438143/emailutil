@@ -26,13 +26,13 @@ public class SendEmailTest {
 		emailServerInfo.setMailServerHost(EmailServerHostAndPort.NetEase163_SMTP_SERVER);
 		emailServerInfo.setMailServerPort(EmailServerHostAndPort.SMTP_PORT);
 		emailServerInfo.setValidate(true);
-		emailServerInfo.setUserName("SunnyMarkLiu@163.com");
-		emailServerInfo.setPassword("sqmmjlqwd992101"); // 注意使用的是开通 SMTP 协议的授权码
-		emailServerInfo.setMyEmailAddress("SunnyMarkLiu@163.com");		
+		emailServerInfo.setUserName("xxxxxx@163.com");
+		emailServerInfo.setPassword("xxxxxx"); // 注意使用的是开通 SMTP 协议的授权码
+		emailServerInfo.setMyEmailAddress("xxxxxx@163.com");		
 		
 		// 构建邮件 email
 		EmailInfo email = new EmailInfo();
-		String[] toes = {"1291833546@qq.com", "2051459265@qq.com"};
+		String[] toes = {"xxxxxx@qq.com", "xxxxxx@qq.com"};
 		email.setToAddress(toes).setSubject("test 主题2");
 		
 		StringBuffer content = new StringBuffer();
@@ -69,9 +69,9 @@ public class SendEmailTest {
 		emailServerInfo.setMailServerHost(EmailServerHostAndPort.NetEase163_SMTP_SERVER);
 		emailServerInfo.setMailServerPort(EmailServerHostAndPort.SMTP_PORT);
 		emailServerInfo.setValidate(true);
-		emailServerInfo.setUserName("SunnyMarkLiu@163.com");
+		emailServerInfo.setUserName("xxxxxx@163.com");
 		emailServerInfo.setPassword(""); // 注意使用的是开通 SMTP 协议的授权码
-		emailServerInfo.setMyEmailAddress("SunnyMarkLiu@163.com");
+		emailServerInfo.setMyEmailAddress("xxxxxx@163.com");
 
 		EmailServerService emailServerService = new EmailServerService();
 
@@ -81,7 +81,7 @@ public class SendEmailTest {
 			System.out.println(emailServerInfo.getMailServerHost() + " 登陆成功！");
 			// 构建邮件 email
 			EmailInfo email = new EmailInfo();
-			String[] toes = {"1291833546@qq.com", "2051459265@qq.com"};
+			String[] toes = {"xxxxxx@qq.com", "xxxxxx@qq.com"};
 			email.setToAddress(toes).setSubject("test 主题2")
 					.setContent("this is content内容!");
 			boolean result = emailServerService.sendEmail(sendMailSession, emailServerInfo, email);
