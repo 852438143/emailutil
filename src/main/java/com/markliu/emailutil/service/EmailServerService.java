@@ -193,10 +193,12 @@ public class EmailServerService {
 	        p.put("mail.pop3.host", emailServerInfo.getMailServerHost());
 	        p.put("mail.pop3.port", emailServerInfo.getMailServerPort());
 	        p.put("mail.smtp.auth", emailServerInfo.isValidate() ? "true" : "false");
+	        p.put("mail.pop3s.starttls.enable", "true");
 		} else {
 			p.put("mail.smtp.host", emailServerInfo.getMailServerHost());
 			p.put("mail.smtp.port", emailServerInfo.getMailServerPort());
 			p.put("mail.smtp.auth", emailServerInfo.isValidate() ? "true" : "false");
+			p.put("mail.pop3s.starttls.enable", "true");
 		}
 		return p;
 	}
