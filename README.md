@@ -3,7 +3,7 @@
 
 # How to use
 
-## Fetching Email
+## Fetching Emails
 	@Test
 	public void testReadEmail() throws FileNotFoundException {
 		// 设置登陆邮件服务器的信息
@@ -12,7 +12,7 @@
 		emailServerInfo.setMailServerPort(EmailServerHostAndPort.POP3_PORT);
 		emailServerInfo.setValidate(true);
 		emailServerInfo.setUserName("xxxxxx@163.com"); // change accordingly
-		emailServerInfo.setPassword("xxxxxx"); // 注意使用的是开通 SMTP 协议的授权码
+		emailServerInfo.setPassword("xxxxxx"); // 注意使用开通 SMTP、 POP、IMAP 的授权码
 		emailServerInfo.setMyEmailAddress("xxxxxx@163.com");		
 		
 		// 读取最近的一份邮件
@@ -20,7 +20,7 @@
 		System.out.println(emailInfo.toString());
 	}
 	
-## Sending Email
+## Sending Emails
 
 	@Test
 	public void testSendEmailTemplate() throws FileNotFoundException {
@@ -29,7 +29,7 @@
 		emailServerInfo.setMailServerPort(EmailServerHostAndPort.SMTP_PORT);
 		emailServerInfo.setValidate(true);
 		emailServerInfo.setUserName("xxxxxx@163.com"); // change accordingly
-		emailServerInfo.setPassword("xxxxxx"); // 注意使用的是开通 SMTP 协议的授权码
+		emailServerInfo.setPassword("xxxxxx"); // 注意使用开通 SMTP、 POP、IMAP 的授权码
 		emailServerInfo.setMyEmailAddress("xxxxxx@163.com");		
 		
 		// 构建邮件 email
@@ -52,4 +52,7 @@
 		SendEmailTemplate.sendEmail(emailServerInfo, email);
 	}
 
+## Forwarding Emails
+## Replying Emails
+## Deleting Emails
 更新...
