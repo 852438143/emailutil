@@ -1,7 +1,7 @@
 package com.markliu.emailutil.entities;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -28,9 +28,9 @@ public class EmailInfo {
 	private String content;
 
 	/**
-	 * 附件
+	 * 待上传附件的路径及名称、或下载附件的地址及名称
 	 */
-	private List<File> attachmentFiles = new ArrayList<File>();
+	private List<String> attachmentFiles = new ArrayList<String>();
 
 	public EmailInfo() {
 	}
@@ -62,13 +62,20 @@ public class EmailInfo {
 		return this;
 	}
 
-	public List<File> getAttachmentFiles() {
+	public List<String> getAttachmentFiles() {
 		return attachmentFiles;
 	}
 
-	public EmailInfo setAttachmentFiles(List<File> attachmentFiles) {
+	public EmailInfo setAttachmentFiles(List<String> attachmentFiles) {
 		this.attachmentFiles = attachmentFiles;
 		return this;
+	}
+
+	@Override
+	public String toString() {
+		return "{\n[EmailInfo \n\ttoAddress=" + Arrays.toString(toAddress)
+				+ ", \n\tsubject=" + subject + ", \n\tcontent=" + content
+				+ ", \n\tattachmentFiles=" + attachmentFiles + "\n]";
 	}
 
 }

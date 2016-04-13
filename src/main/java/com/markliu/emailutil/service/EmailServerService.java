@@ -1,7 +1,5 @@
 package com.markliu.emailutil.service;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -10,11 +8,10 @@ import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.mail.Address;
 import javax.mail.Authenticator;
-import javax.mail.Folder;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
-import javax.mail.Part;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Store;
@@ -27,7 +24,7 @@ import javax.mail.internet.MimeMultipart;
 import com.markliu.emailutil.entities.EmailInfo;
 import com.markliu.emailutil.entities.EmailServerInfo;
 import com.markliu.emailutil.entities.ReadEmailInfo;
-import com.markliu.emailutil.util.ReadEmailUtil;
+import com.markliu.emailutil.util.FetchingEmailUtil;
 
 /**
  * 
@@ -51,7 +48,12 @@ public class EmailServerService {
 			Properties properties = getProperties(emailServerInfo, useReadProtocol);
 			// 如果需要身份认证，则创建一个密码验证器
 			if (emailServerInfo.isValidate()) {
-				authentication = new EmailAuthenticator(emailServerInfo);
+				authentication = new Authenticator() {
+					
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication(emailServerInfo.getUserName(), emailServerInfo.getPassword());
+					}
+				};
 			}
 			// 获取回话对象
 			sendMailSession = Session.getDefaultInstance(properties, useReadProtocol ? null : authentication);
@@ -91,13 +93,13 @@ public class EmailServerService {
 			
 			// Multipart is a container that holds multiple body parts.
 			Multipart bodyPartContainer = new MimeMultipart();  
-            MimeBodyPart bodyPart = new MimeBodyPart();  
+            BodyPart bodyPart = new MimeBodyPart();  
             bodyPart.setContent(email.getContent(), "text/html; charset=UTF-8");  
             bodyPartContainer.addBodyPart(bodyPart);    
             if(!email.getAttachmentFiles().isEmpty()){ // 存在附件  
-                for(File file : email.getAttachmentFiles()) { // 遍历所有的附件
+                for(String fileName : email.getAttachmentFiles()) { // 遍历所有的附件
                 	bodyPart=new MimeBodyPart();  
-                    FileDataSource fds=new FileDataSource(file); //得到数据源  
+                    FileDataSource fds=new FileDataSource(fileName); //得到数据源  
                     bodyPart.setDataHandler(new DataHandler(fds)); //得到附件本身并至入BodyPart  
                     bodyPart.setFileName(fds.getName());  //得到文件名同样至入BodyPart
                     bodyPartContainer.addBodyPart(bodyPart);  
@@ -118,56 +120,59 @@ public class EmailServerService {
 		return true;
 	}
 	
-	public List<ReadEmailInfo> readAllEmailInfos(Session sendMailSession, EmailServerInfo emailServerInfo) {
-		
-		List<ReadEmailInfo> allEmailInfos = null;
+	
+	/**
+	 * 获取最近的一份邮件，并保存附件
+	 * @param sendMailSession
+	 * @param emailServerInfo
+	 * @return
+	 */
+	public ReadEmailInfo getLatestOneEmailFromStore(Session sendMailSession, EmailServerInfo emailServerInfo) {
+		ReadEmailInfo emailInfo = null;
 		Store store = null;
-        Folder folder = null;
         try {
             store = sendMailSession.getStore("pop3");
             store.connect(emailServerInfo.getUserName(), emailServerInfo.getPassword());
  
-            folder = store.getFolder("INBOX");
-            folder.open(Folder.READ_ONLY);
+            FetchingEmailUtil fetchingEmailUtil = new FetchingEmailUtil();
+            
+            emailInfo = fetchingEmailUtil.fetchingLatestEmailFromStore(store, true);
+            
+            // close the store
+	        return emailInfo;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if (store != null) {
+                    store.close();
+                }
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        }
+	}
+	
+	public List<ReadEmailInfo> readAllEmailInfos(Session sendMailSession, EmailServerInfo emailServerInfo) {
+		
+		List<ReadEmailInfo> allEmailInfos = null;
+		Store store = null;
+        try {
+            store = sendMailSession.getStore("pop3");
+            store.connect(emailServerInfo.getUserName(), emailServerInfo.getPassword());
  
-            int size = folder.getMessageCount();
-            System.out.println("邮件数目：" + size);
-            Message[] messages = folder.getMessages();
+            FetchingEmailUtil fetchingEmailUtil = new FetchingEmailUtil();
             
-            allEmailInfos = new ArrayList<ReadEmailInfo>();
+            fetchingEmailUtil.fetchingLatestEmailFromStore(store, true);
             
-            for (int i = 0; i < messages.length; i++) {
-            	ReadEmailInfo email = new ReadEmailInfo();
-    			ReadEmailUtil re = new ReadEmailUtil((MimeMessage) messages[i]);
-    			email.setSubject(re.getSubject());
-    			email.setSentDate(re.getSentDate());
-    			email.setNeedReply(re.getReplySign());
-    			
-    			email.setReaded(re.isNew());
-    			email.setContainsAttachments(re.isContainAttach((Part) messages[i]));
-    			email.setFromAddress(re.getFrom());
-    			email.setToAddress(new String[]{re.getMailAddress("to")});
-    			email.setCarbonCopy(re.getMailAddress("cc"));
-    			email.setDarkCopy(re.getMailAddress("bcc"));
-    			
-    			re.getMailContent((Part) messages[i]);
-    			
-    			email.setContent(re.getBodyText());
-    			
-    			// 保存附件
-    			re.setAttachPath("E:\\email_attachments");
-    			re.saveAttachMent((Part) messages[i]);
-    		}
-	            
+            // close the store
 	        return allEmailInfos;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         } finally {
             try {
-                if (folder != null) {
-                    folder.close(false);
-                }
                 if (store != null) {
                     store.close();
                 }
@@ -196,21 +201,4 @@ public class EmailServerService {
 		return p;
 	}
 	
-	/**
-	 * 密码验证器
-	 *
-	 */
-	private class EmailAuthenticator extends Authenticator {
-		private String userName = null;
-		private String password = null;
-
-		public EmailAuthenticator(EmailServerInfo emailServerInfo) {
-			this.userName = emailServerInfo.getUserName();
-			this.password = emailServerInfo.getPassword();
-		}
-		
-		protected PasswordAuthentication getPasswordAuthentication() {
-			return new PasswordAuthentication(userName, password);
-		}
-	}
 }

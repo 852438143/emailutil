@@ -1,6 +1,5 @@
 package com.markliu.emailutil.emailsender;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 
 import javax.mail.Session;
@@ -56,12 +55,9 @@ public class SendEmailTest {
 		email.setContent(content.toString());
 		
 		// 设置上传的附件
-		File file1 = new File("E:\\Photos\\bob.jpeg");
-		File file2 = new File("E:\\heartocat.png");
-		File file3 = new File("E:\\Music\\Alison Krauss - When You Say Nothing At All.mp3");
-		email.getAttachmentFiles().add(file1);
-		email.getAttachmentFiles().add(file2);
-		email.getAttachmentFiles().add(file3);
+		email.getAttachmentFiles().add("E:\\Photos\\bob.jpeg");
+		email.getAttachmentFiles().add("E:\\heartocat.png");
+		email.getAttachmentFiles().add("E:\\Music\\Alison Krauss - When You Say Nothing At All.mp3");
 		
 		SendEmailTemplate.sendEmail(emailServerInfo, email);
 	}

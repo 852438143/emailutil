@@ -1,5 +1,6 @@
 package com.markliu.emailutil.entities;
 
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -30,28 +31,44 @@ public class ReadEmailInfo extends EmailInfo {
 	/**
 	 * 是否包含附件
 	 */
-	private boolean containsAttachments;
+	private boolean containsAttachments = false;
 	
 	/**
 	 * 抄送
 	 */
-	private String carbonCopy;
+	private String[] carbonCopy;
 	
-	private String darkCopy;
+	/**
+	 * 	暗抄送
+	 */
+	private String[] darkCopy;
 	
-	public String getDarkCopy() {
+	/**
+	 * 此邮件的Message-ID
+	 */
+	private String messageID;
+	
+	public String getMessageID() {
+		return messageID;
+	}
+
+	public void setMessageID(String messageID) {
+		this.messageID = messageID;
+	}
+
+	public String[] getDarkCopy() {
 		return darkCopy;
 	}
 
-	public void setDarkCopy(String darkCopy) {
+	public void setDarkCopy(String[] darkCopy) {
 		this.darkCopy = darkCopy;
 	}
 
-	public String getCarbonCopy() {
+	public String[] getCarbonCopy() {
 		return carbonCopy;
 	}
 
-	public void setCarbonCopy(String carbonCopy) {
+	public void setCarbonCopy(String[] carbonCopy) {
 		this.carbonCopy = carbonCopy;
 	}
 
@@ -95,4 +112,15 @@ public class ReadEmailInfo extends EmailInfo {
 		this.containsAttachments = containsAttachments;
 	}
 
+	@Override
+	public String toString() {
+		return super.toString() + "\n[ReadEmailInfo {\n\tfromAddress=" + fromAddress + ", \n\tsentDate="
+				+ sentDate + ", \n\tneedReply=" + needReply + ", \n\tisReaded="
+				+ isReaded + ", \n\tcontainsAttachments=" + containsAttachments
+				+ ", \n\tcarbonCopy=" + Arrays.toString(carbonCopy) + ", \n\tdarkCopy="
+				+ Arrays.toString(darkCopy) + ", \n\tmessageID=" + messageID + "\n]}";
+	}
+
+	
+	
 }

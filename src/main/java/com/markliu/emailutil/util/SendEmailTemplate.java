@@ -59,4 +59,26 @@ public class SendEmailTemplate {
 			return null;
 		}
 	}
+	
+	/**
+	 * 获取最近的一份邮件，并保存附件
+	 * 
+	 * @param emailServerInfo
+	 * @return
+	 */
+	public static ReadEmailInfo getLatestOneEmailInfo(EmailServerInfo emailServerInfo) {
+		EmailServerService emailServerService = new EmailServerService();
+		// 如果登陆成功，则进行发送邮件
+		
+		Session sendMailSession = emailServerService.loginEmailServer(emailServerInfo, true);
+		if (sendMailSession != null) {
+			System.out.println(emailServerInfo.getMailServerHost() + " 登陆成功！");
+			System.out.println("正在读取邮件...");
+			ReadEmailInfo emailInfo = emailServerService.getLatestOneEmailFromStore(sendMailSession, emailServerInfo);
+			return emailInfo;
+		} else {
+			System.out.println(emailServerInfo.getMailServerHost() + " 登陆失败！");
+			return null;
+		}
+	}
 }
