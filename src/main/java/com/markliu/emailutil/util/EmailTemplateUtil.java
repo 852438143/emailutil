@@ -20,6 +20,20 @@ public class EmailTemplateUtil {
 	private static EmailServerService emailServerService = new EmailServerService();
 	
 	/**
+	 * 转发第 msgnum 份邮件, 并补充正文和附件
+	 * 
+	 * @param emailServerInfo
+	 * @param msgnum
+	 * @param content
+	 * @param attachmentFiles
+	 * @return
+	 */
+	public static boolean forwardEmail(EmailServerInfo emailServerInfo,	int msgnum, 
+			String content, String[] attachmentFiles, String[] forwardAddress) {
+		return emailServerService.forwardEmail(emailServerInfo, msgnum, content, attachmentFiles, forwardAddress);
+	}
+	
+	/**
 	 * 回复第 msgnum 份邮件
 	 * @param emailServerInfo
 	 * @param msgnum

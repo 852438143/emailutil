@@ -68,6 +68,114 @@ public class EmailServerService {
 	}
 
 	/**
+	 * 转发第 msgnum 份邮件, 并补充正文和附件
+	 * 
+	 * @param emailServerInfo
+	 * @param msgnum
+	 * @param content
+	 * @param attachmentFiles
+	 * @param forwardAddress
+	 * @return
+	 */
+	public boolean forwardEmail(EmailServerInfo emailServerInfo,	int msgnum, 
+					String content, String[] attachmentFiles, String[] forwardAddress) {
+		Properties properties = new Properties();
+		properties.put("mail.store.protocol", "pop3");
+		properties.put("mail.pop3s.host",
+				emailServerInfo.getMailServerPOP3Host());
+		properties.put("mail.pop3s.port", EmailServerHostAndPort.POP3_TLS_PORT);
+		properties.put("mail.pop3.starttls.enable", "true");
+		properties.put("mail.smtp.auth", "true");
+		properties.put("mail.smtp.host",
+				emailServerInfo.getMailServerSMTPHost());
+		properties.put("mail.smtp.port", EmailServerHostAndPort.SMTP_PORT);
+
+		Session session = Session.getDefaultInstance(properties);
+		try {
+			// Get a Store object and connect to the current host
+			Store store = session.getStore("pop3s");
+			store.connect(emailServerInfo.getMailServerPOP3Host(),
+					emailServerInfo.getMyEmailAddress(),
+					emailServerInfo.getPassword());// change the user and
+													// password accordingly
+
+			// Create a Folder object and open the folder
+			Folder folder = store.getFolder("inbox");
+			folder.open(Folder.READ_ONLY);
+			Message message = folder.getMessage(msgnum);
+			// Get all the information from the message
+			String to = InternetAddress.toString(message.getRecipients(Message.RecipientType.TO));
+
+			// 转发的邮件信息
+			Message forward = new MimeMessage(session);
+			
+			// 设置转发的地址
+			if (forwardAddress != null && forwardAddress.length > 0) {
+				Address[] addresses = new Address[forwardAddress.length];
+				for (int i = 0; i < forwardAddress.length; i++) {
+					addresses[i] = new InternetAddress(forwardAddress[i]);
+				}
+				forward.setRecipients(Message.RecipientType.TO,	addresses);
+			} else {
+				// 如果未设置转发地址，默认转发给原来的人
+				String from = InternetAddress.toString(message.getFrom());
+				forward.setRecipients(Message.RecipientType.TO,
+			               InternetAddress.parse(from));
+			}
+			
+			forward.setSubject("Fwd: " + message.getSubject());
+			forward.setFrom(new InternetAddress(to));
+
+			// Create the message part
+			MimeBodyPart messageBodyPart = new MimeBodyPart();
+			// Create a multipart message
+			Multipart multipart = new MimeMultipart();
+			// set content
+			messageBodyPart.setContent(message, "message/rfc822");
+			// Add part to multi part
+			multipart.addBodyPart(messageBodyPart);
+			// Associate multi-part with message
+			
+			// Multipart is a container that holds multiple body parts.
+            BodyPart bodyPart = new MimeBodyPart();  
+            bodyPart.setContent(content, "text/html; charset=UTF-8");  
+            multipart.addBodyPart(bodyPart);    
+            if(attachmentFiles != null && attachmentFiles.length > 0){ // 存在附件  
+                for(String fileName : attachmentFiles) { // 遍历所有的附件
+                	bodyPart=new MimeBodyPart();  
+                    FileDataSource fds=new FileDataSource(fileName); //得到数据源  
+                    bodyPart.setDataHandler(new DataHandler(fds)); //得到附件本身并至入BodyPart  
+                    bodyPart.setFileName(fds.getName());  //得到文件名同样至入BodyPart
+                    multipart.addBodyPart(bodyPart);  
+                }    
+            }
+            // 设置邮件消息的主要内容
+            forward.setContent(multipart); //Multipart加入到信件
+            
+			forward.saveChanges();
+
+			Transport t = session.getTransport("smtp");
+			try {
+				// connect to the smpt server using transport instance
+				t.connect(emailServerInfo.getUserName(), emailServerInfo.getPassword());
+				t.sendMessage(forward, forward.getAllRecipients());
+			} finally {
+				t.close();
+			}
+
+			// close the store and folder objects
+			folder.close(false);
+			store.close();
+			
+			return true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	/**
 	 * 回复第 msgnum 份邮件
 	 * @param emailServerInfo
 	 * @param msgnum
