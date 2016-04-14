@@ -1,4 +1,4 @@
-package com.markliu.emailutil.emailsender;
+package com.markliu.emailutil;
 
 import java.io.FileNotFoundException;
 

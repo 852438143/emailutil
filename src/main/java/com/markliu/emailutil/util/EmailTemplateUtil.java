@@ -44,7 +44,7 @@ public class EmailTemplateUtil {
 		}
 	}
 	
-	public static List<ReadEmailInfo> readAllEmailInfos(EmailServerInfo emailServerInfo) {
+	public static List<ReadEmailInfo> getAllEmailInfos(EmailServerInfo emailServerInfo) {
 		EmailServerService emailServerService = new EmailServerService();
 		// 如果登陆成功，则进行发送邮件
 		

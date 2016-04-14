@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import javax.mail.Message;
 import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.Store;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
 
@@ -31,6 +33,26 @@ public class FetchingEmailUtil {
 	
 	private final static String SAVE_ATTACHMENTS_PATH = "E:\\email_attachments\\temp\\";
 	
+	
+	public List<ReadEmailInfo> fetchingAllEmailInfos(Store store, boolean closeFolder) throws Exception {
+		List<ReadEmailInfo> emailInfos = new ArrayList<ReadEmailInfo>();
+		
+		// create the folder object and open it
+		Folder emailFolder = store.getFolder("INBOX");
+		emailFolder.open(Folder.READ_ONLY);
+
+		// retrieve all messages from the folder in an array 
+		Message[] messages = emailFolder.getMessages();
+		for (Message message : messages) {
+			ReadEmailInfo emailInfo = new ReadEmailInfo();
+			writePart(message, emailInfo);
+			emailInfos.add(emailInfo);
+		}
+		if (closeFolder) {
+			emailFolder.close(false);
+		}
+		return emailInfos;
+	}
 	/**
 	 * 获取一份最新的邮件
 	 * @return
@@ -121,17 +143,18 @@ public class FetchingEmailUtil {
 				System.out.println("-------------p.getContentType()--------------");
 				
 				String attachmentFileName = p.getDataHandler().getDataSource().getName();
-				attachmentFileName = MimeUtility.decodeText(attachmentFileName);
-				System.out.println("附件文件名：" + attachmentFileName);
-				
-				InputStream fileIn = p.getDataHandler().getDataSource().getInputStream();
-				List<String> attachmentFiles = emailInfo.getAttachmentFiles();
-				attachmentFiles.add(SAVE_ATTACHMENTS_PATH +attachmentFileName);
-				
-				// 保存附件路径及名称
-				emailInfo.setAttachmentFiles(attachmentFiles);
-				// 开启线程保存文件
-				new SaveFileThread(fileIn, attachmentFileName).start();
+				if (attachmentFileName != null) {
+					attachmentFileName = MimeUtility.decodeText(attachmentFileName);
+					System.out.println("附件文件名：" + attachmentFileName);
+					InputStream fileIn = p.getDataHandler().getDataSource().getInputStream();
+					List<String> attachmentFiles = emailInfo.getAttachmentFiles();
+					attachmentFiles.add(SAVE_ATTACHMENTS_PATH +attachmentFileName);
+					
+					// 保存附件路径及名称
+					emailInfo.setAttachmentFiles(attachmentFiles);
+					// 开启线程保存文件
+					new SaveFileThread(fileIn, attachmentFileName).start();
+				}
 				
 			} else {
 				System.out.println("This is an unknown type");
@@ -159,30 +182,48 @@ public class FetchingEmailUtil {
 		}
 
 		// TO
-		if ((a = m.getRecipients(Message.RecipientType.TO)) != null) {
+		try {
+			a = m.getRecipients(Message.RecipientType.TO);
+		} catch (AddressException e) {
+			System.out.println("*********** TO Illegal semicolon *************");
+			System.out.println(e.getMessage());
+		}
+		if ( a != null) {
 			String[] toes = new String[a.length];
 			for (int j = 0; j < a.length; j++) {
-				System.out.println("TO: " + MimeUtility.decodeText(a[j].toString()));
+				System.out.println("TO address: " + MimeUtility.decodeText(a[j].toString()));
 				toes[j] = MimeUtility.decodeText(a[j].toString());
 			}
 			emailInfo.setToAddress(toes);
 		}
 		
 		// CC
-		if ((a = m.getRecipients(Message.RecipientType.CC)) != null) {
+		try {
+			a = m.getRecipients(Message.RecipientType.CC);
+		} catch (Exception e) {
+			System.out.println("*********** CC Illegal semicolon *************");
+			System.out.println(e.getMessage());
+		}
+		if (a != null) {
 			String[] toes = new String[a.length];
 			for (int j = 0; j < a.length; j++) {
-				System.out.println("TO: " + MimeUtility.decodeText(a[j].toString()));
+				System.out.println("TO CC: " + MimeUtility.decodeText(a[j].toString()));
 				toes[j] = MimeUtility.decodeText(a[j].toString());
 			}
 			emailInfo.setCarbonCopy(toes);
 		}
 		
 		// BCC
-		if ((a = m.getRecipients(Message.RecipientType.BCC)) != null) {
+		try {
+			a = m.getRecipients(Message.RecipientType.BCC);
+		} catch (Exception e) {
+			System.out.println("*********** BCC Illegal semicolon *************");
+			System.out.println(e.getMessage());
+		}
+		if (a != null) {
 			String[] toes = new String[a.length];
 			for (int j = 0; j < a.length; j++) {
-				System.out.println("TO: " + MimeUtility.decodeText(a[j].toString()));
+				System.out.println("TO BCC: " + MimeUtility.decodeText(a[j].toString()));
 				toes[j] = MimeUtility.decodeText(a[j].toString());
 			}
 			emailInfo.setDarkCopy(toes);
