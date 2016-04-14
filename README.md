@@ -8,12 +8,11 @@
 	public void testReadEmail() throws FileNotFoundException {
 		// 设置登陆邮件服务器的信息
 		EmailServerInfo emailServerInfo = new EmailServerInfo();
-		emailServerInfo.setMailServerHost(EmailServerHostAndPort.NetEase163_POP3_SERVER);
-		emailServerInfo.setMailServerPort(EmailServerHostAndPort.POP3_PORT);
+		emailServerInfo.setMailServerPOP3Host(EmailServerHostAndPort.NetEase163_POP3_SERVER);
 		emailServerInfo.setValidate(true);
-		emailServerInfo.setUserName("xxxxxx@163.com"); // change accordingly
-		emailServerInfo.setPassword("xxxxxx"); // 注意使用开通 SMTP、 POP、IMAP 的授权码
-		emailServerInfo.setMyEmailAddress("xxxxxx@163.com");		
+		emailServerInfo.setUserName("xxxxxx@163.com");
+		emailServerInfo.setPassword("xxxxxx"); // 注意使用的是开通 SMTP、 POP、IMAP 协议的授权码
+		emailServerInfo.setMyEmailAddress("xxxxxx@163.com");	
 		
 		// 读取最近的一份邮件
 		ReadEmailInfo emailInfo = EmailTemplateUtil.getLatestOneEmailInfo(emailServerInfo);
@@ -24,13 +23,13 @@
 
 	@Test
 	public void testSendEmailTemplate() throws FileNotFoundException {
+		// 设置登陆邮件服务器的信息
 		EmailServerInfo emailServerInfo = new EmailServerInfo();
-		emailServerInfo.setMailServerHost(EmailServerHostAndPort.NetEase163_SMTP_SERVER);
-		emailServerInfo.setMailServerPort(EmailServerHostAndPort.SMTP_PORT);
+		emailServerInfo.setMailServerSMTPHost(EmailServerHostAndPort.NetEase163_SMTP_SERVER);
 		emailServerInfo.setValidate(true);
-		emailServerInfo.setUserName("xxxxxx@163.com"); // change accordingly
-		emailServerInfo.setPassword("xxxxxx"); // 注意使用开通 SMTP、 POP、IMAP 的授权码
-		emailServerInfo.setMyEmailAddress("xxxxxx@163.com");		
+		emailServerInfo.setUserName("xxxxxx@163.com");
+		emailServerInfo.setPassword("xxxxxx"); // 注意使用的是开通 SMTP、 POP、IMAP 协议的授权码
+		emailServerInfo.setMyEmailAddress("xxxxxx@163.com");			
 		
 		// 构建邮件 email
 		EmailInfo email = new EmailInfo();
@@ -56,21 +55,45 @@
 
 	@Test
 	public void testDeleteEmail() throws FileNotFoundException {
+		// 设置登陆邮件服务器的信息
 		EmailServerInfo emailServerInfo = new EmailServerInfo();
-		emailServerInfo.setMailServerHost(EmailServerHostAndPort.NetEase163_POP3_SERVER);
-		emailServerInfo.setMailServerPort(EmailServerHostAndPort.POP3_PORT);
+		emailServerInfo.setMailServerPOP3Host(EmailServerHostAndPort.NetEase163_POP3_SERVER);
 		emailServerInfo.setValidate(true);
-		emailServerInfo.setUserName("xxxxxx@163.com");
-		emailServerInfo.setPassword("xxxxxx"); // 注意使用的是开通 SMTP 协议的授权码
+		emailServerInfo.setUserName("xxxxx@163.com");
+		emailServerInfo.setPassword("xxxxxx"); // 注意使用的是开通 SMTP、 POP、IMAP 协议的授权码
 		emailServerInfo.setMyEmailAddress("xxxxxx@163.com");
 		
-		if (EmailTemplateUtil.deleteEmailByMsgNum(emailServerInfo, 64)) {
+		// 删除第一份邮件
+		if (EmailTemplateUtil.deleteEmailByMsgNum(emailServerInfo, 1)) {
 			System.out.println("删除成功！");
 		} else {
 			System.out.println("删除失败！");
 		}
 	}
 	
-## Forwarding Emails
 ## Replying Emails
+
+	@Test
+	public void testDeleteEmail() throws FileNotFoundException {
+		// 设置登陆邮件服务器的信息
+		EmailServerInfo emailServerInfo = new EmailServerInfo();
+		emailServerInfo.setMailServerPOP3Host(EmailServerHostAndPort.NetEase163_POP3_SERVER);
+		emailServerInfo.setMailServerSMTPHost(EmailServerHostAndPort.NetEase163_SMTP_SERVER);
+		emailServerInfo.setValidate(true);
+		emailServerInfo.setUserName("xxxxxx@163.com");
+		emailServerInfo.setPassword("xxxxxx"); // 注意使用的是开通 SMTP、 POP、IMAP 协议的授权码
+		emailServerInfo.setMyEmailAddress("xxxxxx@163.com");
+		
+		String content = "这是回复内容";
+		String[] attachmentFiles = {"E:\\Photos\\bob.jpeg"}; // 设置回复的附件
+		
+		// 回复第一份邮件
+		if (EmailTemplateUtil.replyEmail(emailServerInfo, 1, content, attachmentFiles)) {
+			System.out.println("回复成功！");
+		} else {
+			System.out.println("回复失败！");
+		}
+	}
+	
+## Forwarding Emails
 更新...

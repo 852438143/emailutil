@@ -24,6 +24,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import com.markliu.emailutil.entities.EmailInfo;
+import com.markliu.emailutil.entities.EmailServerHostAndPort;
 import com.markliu.emailutil.entities.EmailServerInfo;
 import com.markliu.emailutil.entities.ReadEmailInfo;
 import com.markliu.emailutil.util.FetchingEmailUtil;
@@ -67,6 +68,89 @@ public class EmailServerService {
 	}
 
 	/**
+	 * 回复第 msgnum 份邮件
+	 * @param emailServerInfo
+	 * @param msgnum
+	 * @param replyEmail
+	 * @return
+	 */
+	public boolean replyEmail(EmailServerInfo emailServerInfo, int msgnum, String content, String[] attachmentFiles) {
+		
+		Properties properties = new Properties();
+		properties.put("mail.store.protocol", "pop3");
+		properties.put("mail.pop3s.host", emailServerInfo.getMailServerPOP3Host());
+		properties.put("mail.pop3s.port", EmailServerHostAndPort.POP3_TLS_PORT);
+		properties.put("mail.pop3.starttls.enable", "true");
+		properties.put("mail.smtp.auth", "true");
+		properties.put("mail.smtp.starttls.enable", "true");
+		properties.put("mail.smtp.host", emailServerInfo.getMailServerSMTPHost());
+		properties.put("mail.smtp.port", EmailServerHostAndPort.SMTP_PORT);
+		Session session = Session.getDefaultInstance(properties);
+		
+		try {
+			// Get a Store object and connect to the current host
+			Store store = session.getStore("pop3s");
+			store.connect(emailServerInfo.getMailServerPOP3Host(),
+					emailServerInfo.getMyEmailAddress(),
+					emailServerInfo.getPassword());// change the user and
+													// password accordingly
+
+			Folder folder = store.getFolder("INBOX");
+			folder.open(Folder.READ_ONLY);
+
+			Message message = folder.getMessage(msgnum);
+			String to = InternetAddress.toString(message.getRecipients(Message.RecipientType.TO));
+			
+			Message replyMessage = new MimeMessage(session);
+			replyMessage = (MimeMessage) message.reply(false);
+			replyMessage.setFrom(new InternetAddress(to));
+			
+			// 设置回复的邮件地址
+			replyMessage.setReplyTo(message.getReplyTo());
+			
+			// Multipart is a container that holds multiple body parts.
+			Multipart bodyPartContainer = new MimeMultipart();  
+            BodyPart bodyPart = new MimeBodyPart(); 
+            // 设置回复的正文
+            bodyPart.setContent(content, "text/html; charset=UTF-8");  
+            bodyPartContainer.addBodyPart(bodyPart);    
+            
+            if(attachmentFiles != null && attachmentFiles.length > 0){ // 存在附件  
+                for(String fileName : attachmentFiles) { // 遍历所有的附件
+                	bodyPart=new MimeBodyPart();  
+                    FileDataSource fds=new FileDataSource(fileName); //得到数据源  
+                    bodyPart.setDataHandler(new DataHandler(fds)); //得到附件本身并至入BodyPart  
+                    bodyPart.setFileName(fds.getName());  //得到文件名同样至入BodyPart
+                    bodyPartContainer.addBodyPart(bodyPart);  
+                }    
+            }
+            // 设置邮件消息的主要内容
+            replyMessage.setContent(bodyPartContainer); //Multipart加入到信件
+            
+			// Send the message by authenticating the SMTP server
+			// Create a Transport instance and call the sendMessage
+			Transport t = session.getTransport("smtp");
+			try {
+				// connect to the smpt server using transport instance
+				t.connect(emailServerInfo.getMyEmailAddress(),
+						emailServerInfo.getPassword());
+				t.sendMessage(replyMessage, replyMessage.getAllRecipients());
+			} finally {
+				t.close();
+			}
+
+			// close the store and folder objects
+			folder.close(false);
+			store.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	/**
 	 * 按照收件箱邮件的顺序删除第 msgnum 号邮件
 	 * 
 	 * @param deleteMailSession
@@ -79,7 +163,7 @@ public class EmailServerService {
 	        // get the session object
 	        Properties properties = new Properties();
 	        properties.put("mail.store.protocol", "pop3");
-	        properties.put("mail.pop3s.host", emailServerInfo.getMailServerHost());
+	        properties.put("mail.pop3s.host", emailServerInfo.getMailServerPOP3Host());
 	        properties.put("mail.pop3s.port", "995");
 	        properties.put("mail.pop3.starttls.enable", "true");
 	        Session deleteMailSession = Session.getDefaultInstance(properties);
@@ -87,7 +171,7 @@ public class EmailServerService {
 			// create the POP3 store object and connect with the pop server
 			Store store = deleteMailSession.getStore("pop3s");
 
-			store.connect(emailServerInfo.getMailServerHost(),
+			store.connect(emailServerInfo.getMailServerPOP3Host(),
 					emailServerInfo.getUserName(), emailServerInfo.getPassword());
 
 			// create the folder object and open it
@@ -245,13 +329,13 @@ public class EmailServerService {
 	private Properties getProperties(EmailServerInfo emailServerInfo, boolean useReadProtocol) {
 		Properties p = new Properties();
 		if (useReadProtocol) {
-	        p.put("mail.pop3.host", emailServerInfo.getMailServerHost());
-	        p.put("mail.pop3.port", emailServerInfo.getMailServerPort());
+	        p.put("mail.pop3.host", emailServerInfo.getMailServerPOP3Host());
+	        p.put("mail.pop3.port", EmailServerHostAndPort.POP3_PORT);
 	        p.put("mail.pop3.auth", emailServerInfo.isValidate() ? "true" : "false");
 	        p.put("mail.pop3s.starttls.enable", "true");
 		} else {
-			p.put("mail.smtp.host", emailServerInfo.getMailServerHost());
-			p.put("mail.smtp.port", emailServerInfo.getMailServerPort());
+			p.put("mail.smtp.host", emailServerInfo.getMailServerSMTPHost());
+			p.put("mail.smtp.port", EmailServerHostAndPort.SMTP_PORT);
 			p.put("mail.smtp.auth", emailServerInfo.isValidate() ? "true" : "false");
 			p.put("mail.smtp.starttls.enable", "true");
 		}

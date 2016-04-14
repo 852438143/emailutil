@@ -18,6 +18,21 @@ import com.markliu.emailutil.service.EmailServerService;
 public class EmailTemplateUtil {
 
 	private static EmailServerService emailServerService = new EmailServerService();
+	
+	/**
+	 * 回复第 msgnum 份邮件
+	 * @param emailServerInfo
+	 * @param msgnum
+	 * @param content
+	 * @param attachmentFiles
+	 * @return
+	 */
+	public static boolean replyEmail(EmailServerInfo emailServerInfo, int msgnum, 
+									String content, String[] attachmentFiles) {
+		return emailServerService.replyEmail(emailServerInfo, msgnum, content, attachmentFiles);
+	}
+	
+	
 	/**
 	 * 发送邮件的模板方法
 	 * @param emailServerInfo
@@ -29,7 +44,7 @@ public class EmailTemplateUtil {
 		
 		Session sendMailSession = emailServerService.loginEmailServer(emailServerInfo, false);
 		if (sendMailSession != null) {
-			System.out.println(emailServerInfo.getMailServerHost() + " 登陆成功！");
+			System.out.println(emailServerInfo.getMailServerSMTPHost() + " 登陆成功！");
 			System.out.println("正在发送邮件...");
 			boolean result = emailServerService.sendEmail(sendMailSession, emailServerInfo, email);
 			if (result) {
@@ -39,7 +54,7 @@ public class EmailTemplateUtil {
 			}
 			return result;
 		} else {
-			System.out.println(emailServerInfo.getMailServerHost() + " 登陆失败！");
+			System.out.println(emailServerInfo.getMailServerSMTPHost() + " 登陆失败！");
 			return false;
 		}
 	}
@@ -54,12 +69,12 @@ public class EmailTemplateUtil {
 		
 		Session sendMailSession = emailServerService.loginEmailServer(emailServerInfo, true);
 		if (sendMailSession != null) {
-			System.out.println(emailServerInfo.getMailServerHost() + " 登陆成功！");
+			System.out.println(emailServerInfo.getMailServerPOP3Host() + " 登陆成功！");
 			System.out.println("正在读取邮件...");
 			List<ReadEmailInfo> emailInfos = emailServerService.readAllEmailInfos(sendMailSession, emailServerInfo);
 			return emailInfos;
 		} else {
-			System.out.println(emailServerInfo.getMailServerHost() + " 登陆失败！");
+			System.out.println(emailServerInfo.getMailServerPOP3Host() + " 登陆失败！");
 			return null;
 		}
 	}
@@ -75,12 +90,12 @@ public class EmailTemplateUtil {
 		
 		Session sendMailSession = emailServerService.loginEmailServer(emailServerInfo, true);
 		if (sendMailSession != null) {
-			System.out.println(emailServerInfo.getMailServerHost() + " 登陆成功！");
+			System.out.println(emailServerInfo.getMailServerPOP3Host() + " 登陆成功！");
 			System.out.println("正在读取邮件...");
 			ReadEmailInfo emailInfo = emailServerService.getLatestOneEmailFromStore(sendMailSession, emailServerInfo);
 			return emailInfo;
 		} else {
-			System.out.println(emailServerInfo.getMailServerHost() + " 登陆失败！");
+			System.out.println(emailServerInfo.getMailServerPOP3Host() + " 登陆失败！");
 			return null;
 		}
 	}

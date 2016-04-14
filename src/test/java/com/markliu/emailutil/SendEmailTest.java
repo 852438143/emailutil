@@ -23,11 +23,10 @@ public class SendEmailTest {
 	@Test
 	public void testSendEmailTemplate() throws FileNotFoundException {
 		EmailServerInfo emailServerInfo = new EmailServerInfo();
-		emailServerInfo.setMailServerHost(EmailServerHostAndPort.NetEase163_SMTP_SERVER);
-		emailServerInfo.setMailServerPort(EmailServerHostAndPort.SMTP_PORT);
+		emailServerInfo.setMailServerSMTPHost(EmailServerHostAndPort.NetEase163_SMTP_SERVER);
 		emailServerInfo.setValidate(true);
 		emailServerInfo.setUserName("xxxxxx@163.com");
-		emailServerInfo.setPassword("xxxxxx"); // 注意使用的是开通 SMTP 协议的授权码
+		emailServerInfo.setPassword("xxxxxx"); // 注意使用的是开通 SMTP、 POP、IMAP 协议的授权码
 		emailServerInfo.setMyEmailAddress("xxxxxx@163.com");		
 		
 		// 构建邮件 email
@@ -57,7 +56,7 @@ public class SendEmailTest {
 		// 设置上传的附件
 		email.getAttachmentFiles().add("E:\\Photos\\bob.jpeg");
 		email.getAttachmentFiles().add("E:\\heartocat.png");
-		email.getAttachmentFiles().add("E:\\Music\\Alison Krauss - When You Say Nothing At All.mp3");
+//		email.getAttachmentFiles().add("E:\\Music\\Alison Krauss - When You Say Nothing At All.mp3");
 		
 		EmailTemplateUtil.sendEmail(emailServerInfo, email);
 	}
@@ -66,11 +65,10 @@ public class SendEmailTest {
 	public void testSendEmail() {
 
 		EmailServerInfo emailServerInfo = new EmailServerInfo();
-		emailServerInfo.setMailServerHost(EmailServerHostAndPort.NetEase163_SMTP_SERVER);
-		emailServerInfo.setMailServerPort(EmailServerHostAndPort.SMTP_PORT);
+		emailServerInfo.setMailServerSMTPHost(EmailServerHostAndPort.NetEase163_SMTP_SERVER);
 		emailServerInfo.setValidate(true);
 		emailServerInfo.setUserName("xxxxxx@163.com");
-		emailServerInfo.setPassword(""); // 注意使用的是开通 SMTP 协议的授权码
+		emailServerInfo.setPassword(""); // 注意使用的是开通 SMTP、 POP、IMAP 协议的授权码
 		emailServerInfo.setMyEmailAddress("xxxxxx@163.com");
 
 		EmailServerService emailServerService = new EmailServerService();
@@ -78,7 +76,7 @@ public class SendEmailTest {
 		// 如果登陆成功，则进行发送邮件
 		Session sendMailSession = emailServerService.loginEmailServer(emailServerInfo, false);
 		if (sendMailSession != null) {
-			System.out.println(emailServerInfo.getMailServerHost() + " 登陆成功！");
+			System.out.println(emailServerInfo.getMailServerSMTPHost() + " 登陆成功！");
 			// 构建邮件 email
 			EmailInfo email = new EmailInfo();
 			String[] toes = {"xxxxxx@qq.com", "xxxxxx@qq.com"};
@@ -91,7 +89,7 @@ public class SendEmailTest {
 				System.out.println("发送失败！");
 			}
 		} else {
-			System.out.println(emailServerInfo.getMailServerHost() + " 登陆失败！");
+			System.out.println(emailServerInfo.getMailServerSMTPHost() + " 登陆失败！");
 		}
 	}
 

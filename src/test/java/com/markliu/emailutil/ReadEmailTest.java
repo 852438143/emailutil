@@ -21,11 +21,10 @@ public class ReadEmailTest {
 	@Test
 	public void testReadAllEmails() throws FileNotFoundException {
 		EmailServerInfo emailServerInfo = new EmailServerInfo();
-		emailServerInfo.setMailServerHost(EmailServerHostAndPort.NetEase163_POP3_SERVER);
-		emailServerInfo.setMailServerPort(EmailServerHostAndPort.POP3_PORT);
+		emailServerInfo.setMailServerPOP3Host(EmailServerHostAndPort.NetEase163_POP3_SERVER);
 		emailServerInfo.setValidate(true);
 		emailServerInfo.setUserName("xxxxxx@163.com");
-		emailServerInfo.setPassword("xxxxxx"); // 注意使用的是开通 SMTP 协议的授权码
+		emailServerInfo.setPassword("xxxxxx"); // 注意使用的是开通 SMTP、 POP、IMAP 协议的授权码
 		emailServerInfo.setMyEmailAddress("xxxxxx@163.com");		
 		
 		List<ReadEmailInfo> emailInfos = EmailTemplateUtil.getAllEmailInfos(emailServerInfo);
@@ -38,11 +37,10 @@ public class ReadEmailTest {
 	@Test
 	public void testReadEmailTemplate() throws FileNotFoundException {
 		EmailServerInfo emailServerInfo = new EmailServerInfo();
-		emailServerInfo.setMailServerHost(EmailServerHostAndPort.NetEase163_POP3_SERVER);
-		emailServerInfo.setMailServerPort(EmailServerHostAndPort.POP3_PORT);
+		emailServerInfo.setMailServerPOP3Host(EmailServerHostAndPort.NetEase163_POP3_SERVER);
 		emailServerInfo.setValidate(true);
 		emailServerInfo.setUserName("xxxxxx@163.com");
-		emailServerInfo.setPassword("xxxxxx"); // 注意使用的是开通 SMTP 协议的授权码
+		emailServerInfo.setPassword("xxxxxx"); // 注意使用的是开通 SMTP、 POP、IMAP 协议的授权码
 		emailServerInfo.setMyEmailAddress("xxxxxx@163.com");		
 		
 		ReadEmailInfo emailInfo = EmailTemplateUtil.getLatestOneEmailInfo(emailServerInfo);

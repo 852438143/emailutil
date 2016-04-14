@@ -1,5 +1,6 @@
 package com.markliu.emailutil.entities;
 
+
 /**
  * 登陆的邮箱服务器的信息，包括服务器的 host 和 ip，用户名和密码等
  * 
@@ -10,11 +11,8 @@ public class EmailServerInfo {
 	/**
 	 * 发送邮件的服务器的IP地址
 	 */
-	private String mailServerHost;
-	/**
-	 * 邮件服务器的端口号
-	 */
-	private String mailServerPort;
+	private String mailServerPOP3Host;
+	private String mailServerSMTPHost;
 
 	/**
 	 * 登陆的邮箱
@@ -37,20 +35,20 @@ public class EmailServerInfo {
 	 */
 	private boolean ssl = true;
 
-	public String getMailServerHost() {
-		return mailServerHost;
+	public String getMailServerPOP3Host() {
+		return mailServerPOP3Host;
 	}
 
-	public void setMailServerHost(String mailServerHost) {
-		this.mailServerHost = mailServerHost;
+	public void setMailServerPOP3Host(String mailServerPOP3Host) {
+		this.mailServerPOP3Host = mailServerPOP3Host;
 	}
 
-	public String getMailServerPort() {
-		return mailServerPort;
+	public String getMailServerSMTPHost() {
+		return mailServerSMTPHost;
 	}
 
-	public void setMailServerPort(String mailServerPort) {
-		this.mailServerPort = mailServerPort;
+	public void setMailServerSMTPHost(String mailServerSMTPHost) {
+		this.mailServerSMTPHost = mailServerSMTPHost;
 	}
 
 	public String getMyEmailAddress() {
