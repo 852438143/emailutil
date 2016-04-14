@@ -9,6 +9,8 @@ import javax.activation.FileDataSource;
 import javax.mail.Address;
 import javax.mail.Authenticator;
 import javax.mail.BodyPart;
+import javax.mail.Flags;
+import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -64,6 +66,53 @@ public class EmailServerService {
 		return sendMailSession;
 	}
 
+	/**
+	 * 按照收件箱邮件的顺序删除第 msgnum 号邮件
+	 * 
+	 * @param deleteMailSession
+	 * @param emailServerInfo
+	 * @param msgnum
+	 * @return
+	 */
+	public boolean deleteEmailByMsgNum(EmailServerInfo emailServerInfo, int msgnum) {
+		try {
+	        // get the session object
+	        Properties properties = new Properties();
+	        properties.put("mail.store.protocol", "pop3");
+	        properties.put("mail.pop3s.host", emailServerInfo.getMailServerHost());
+	        properties.put("mail.pop3s.port", "995");
+	        properties.put("mail.pop3.starttls.enable", "true");
+	        Session deleteMailSession = Session.getDefaultInstance(properties);
+	        
+			// create the POP3 store object and connect with the pop server
+			Store store = deleteMailSession.getStore("pop3s");
+
+			store.connect(emailServerInfo.getMailServerHost(),
+					emailServerInfo.getUserName(), emailServerInfo.getPassword());
+
+			// create the folder object and open it
+			Folder emailFolder = store.getFolder("INBOX");
+			emailFolder.open(Folder.READ_WRITE);
+
+			// retrieve the messages from the folder in an array and print it
+			Message message = emailFolder.getMessage(msgnum);
+
+			// set the DELETE flag to true
+			message.setFlag(Flags.Flag.DELETED, true);
+			// expunges the folder to remove messages which are marked deleted
+			/*
+			 * 注意此处需要删除本地数据库的邮件和实际邮箱的邮件，需要添加事务！ 
+			 */
+			emailFolder.close(true);
+			store.close();
+			
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	/**
 	 * 发送邮件
 	 * @param sendMailSession
@@ -154,6 +203,12 @@ public class EmailServerService {
         }
 	}
 	
+	/**
+	 * 读取所有邮件
+	 * @param sendMailSession
+	 * @param emailServerInfo
+	 * @return
+	 */
 	public List<ReadEmailInfo> readAllEmailInfos(Session sendMailSession, EmailServerInfo emailServerInfo) {
 		
 		List<ReadEmailInfo> allEmailInfos = null;
