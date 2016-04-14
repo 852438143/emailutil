@@ -24,7 +24,7 @@ public class ForwardEmailTest {
 		String content = "这是转发的附加内容";
 		String[] attachmentFiles = {"E:\\Photos\\bob.jpeg"};  // 设置附件
 		// 设置转发的地址
-		String[] forwardAddress = {"1291833546@qq.com", "2051459265@qq.com"};
+		String[] forwardAddress = {"xxxxxx@qq.com", "xxxxxx@qq.com"};
 		
 		if (EmailTemplateUtil.forwardEmail(emailServerInfo, 61, content, attachmentFiles, forwardAddress)) {
 			System.out.println("转发成功！");

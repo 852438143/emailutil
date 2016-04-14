@@ -27,7 +27,7 @@ public class SendEmailTest {
 		
 		// 构建邮件 email
 		EmailInfo email = new EmailInfo();
-		String[] toes = {"1291833546@qq.com", "2051459265@qq.com"};
+		String[] toes = {"xxxxxx@qq.com", "xxxxxx@qq.com"};
 		email.setToAddress(toes).setSubject("test 主题2");
 		
 		StringBuffer content = new StringBuffer();
