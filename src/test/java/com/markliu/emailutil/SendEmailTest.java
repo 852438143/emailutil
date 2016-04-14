@@ -7,7 +7,6 @@ import javax.mail.Session;
 import org.junit.Test;
 
 import com.markliu.emailutil.entities.EmailInfo;
-import com.markliu.emailutil.entities.EmailServerHostAndPort;
 import com.markliu.emailutil.entities.EmailServerInfo;
 import com.markliu.emailutil.service.EmailServerService;
 import com.markliu.emailutil.util.EmailTemplateUtil;
@@ -22,16 +21,13 @@ public class SendEmailTest {
 
 	@Test
 	public void testSendEmailTemplate() throws FileNotFoundException {
-		EmailServerInfo emailServerInfo = new EmailServerInfo();
-		emailServerInfo.setMailServerSMTPHost(EmailServerHostAndPort.NetEase163_SMTP_SERVER);
-		emailServerInfo.setValidate(true);
-		emailServerInfo.setUserName("xxxxxx@163.com");
-		emailServerInfo.setPassword("xxxxxx"); // 注意使用的是开通 SMTP、 POP、IMAP 协议的授权码
-		emailServerInfo.setMyEmailAddress("xxxxxx@163.com");		
+		
+		// 获取配置的登陆邮件服务器的信息
+		EmailServerInfo emailServerInfo = EmailTemplateUtil.getConfigEmailServerInfo();
 		
 		// 构建邮件 email
 		EmailInfo email = new EmailInfo();
-		String[] toes = {"xxxxxx@qq.com", "xxxxxx@qq.com"};
+		String[] toes = {"1291833546@qq.com", "2051459265@qq.com"};
 		email.setToAddress(toes).setSubject("test 主题2");
 		
 		StringBuffer content = new StringBuffer();
@@ -64,12 +60,8 @@ public class SendEmailTest {
 	@Test
 	public void testSendEmail() {
 
-		EmailServerInfo emailServerInfo = new EmailServerInfo();
-		emailServerInfo.setMailServerSMTPHost(EmailServerHostAndPort.NetEase163_SMTP_SERVER);
-		emailServerInfo.setValidate(true);
-		emailServerInfo.setUserName("xxxxxx@163.com");
-		emailServerInfo.setPassword(""); // 注意使用的是开通 SMTP、 POP、IMAP 协议的授权码
-		emailServerInfo.setMyEmailAddress("xxxxxx@163.com");
+		// 获取配置的登陆邮件服务器的信息
+		EmailServerInfo emailServerInfo = EmailTemplateUtil.getConfigEmailServerInfo();
 
 		EmailServerService emailServerService = new EmailServerService();
 

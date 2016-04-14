@@ -20,6 +20,14 @@ public class EmailTemplateUtil {
 	private static EmailServerService emailServerService = new EmailServerService();
 	
 	/**
+	 * 获取配置的邮箱服务器的信息
+	 * @return
+	 */
+	public static EmailServerInfo getConfigEmailServerInfo() {
+		return  emailServerService.getConfigEmailServerInfo();
+	}
+	
+	/**
 	 * 转发第 msgnum 份邮件, 并补充正文和附件
 	 * 
 	 * @param emailServerInfo

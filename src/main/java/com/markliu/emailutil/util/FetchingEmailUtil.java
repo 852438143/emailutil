@@ -66,7 +66,7 @@ public class FetchingEmailUtil {
 		emailFolder.open(Folder.READ_ONLY);
 
 		// retrieve the latest messages from the folder in an array 
-		Message message = emailFolder.getMessage(emailFolder.getMessageCount() - 1);
+		Message message = emailFolder.getMessage(emailFolder.getMessageCount());
 		writePart(message, emailInfo);
 
 		if (closeFolder) {

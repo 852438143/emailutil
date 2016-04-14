@@ -1,5 +1,7 @@
 package com.markliu.emailutil.service;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -36,6 +38,72 @@ import com.markliu.emailutil.util.FetchingEmailUtil;
  * @time Apr 12, 2016 4:47:31 PM
  */
 public class EmailServerService {
+	
+	/**
+	 * 获取配置的邮箱服务器的信息
+	 * @return
+	 */
+	public EmailServerInfo getConfigEmailServerInfo() {
+		// 读取配置文件
+		Properties properties = new Properties();
+		InputStream inStream = null;
+		try {
+			// 获取类路径(/)下的配置文件
+			inStream = getClass().getResourceAsStream("/emailServerConfig.properties");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("配置文件加载失败");
+			return null;
+		}
+		try {
+			properties.load(inStream);
+			String mailServer_POP3Host = properties.getProperty("mailServer_POP3Host");
+			String mailServer_SMTPHost = properties.getProperty("mailServer_SMTPHost");
+			String myEmailAddress = properties.getProperty("myEmailAddress");
+			String userName = properties.getProperty("userName");
+			String password = properties.getProperty("password");
+			String validate = properties.getProperty("validate");
+			
+			EmailServerInfo emailServerInfo = new EmailServerInfo();
+			
+			if (mailServer_POP3Host != null && !("".equals(mailServer_POP3Host.trim()))) {
+				emailServerInfo.setMailServerPOP3Host(mailServer_POP3Host.trim());
+			}
+			if (mailServer_SMTPHost != null && !("".equals(mailServer_SMTPHost.trim()))) {
+				emailServerInfo.setMailServerSMTPHost(mailServer_SMTPHost.trim());
+			}
+			if (userName != null && !("".equals(userName.trim()))) {
+				emailServerInfo.setUserName(userName.trim());
+			}
+			if (password != null && !("".equals(password.trim()))) {
+				emailServerInfo.setPassword(password.trim());
+			}
+			if (myEmailAddress != null && !("".equals(myEmailAddress.trim()))) {
+				emailServerInfo.setMyEmailAddress(myEmailAddress.trim());
+			}
+			if (validate != null && !("".equals(validate.trim()))) {
+				boolean isValidate = "true".equals(validate.trim()) ? true : false;
+				emailServerInfo.setValidate(isValidate);
+			}
+			
+			System.out.println("--------邮件服务器配置信息--------");
+			System.out.println(emailServerInfo.toString());
+			return emailServerInfo;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (inStream != null) {
+				try {
+					inStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}
+	
 
 	/**
 	 * 根据 EmailServerInfo 信息登陆邮件服务器，返回mail回话对象
@@ -464,5 +532,5 @@ public class EmailServerService {
 		}
 		return p;
 	}
-	
+
 }
