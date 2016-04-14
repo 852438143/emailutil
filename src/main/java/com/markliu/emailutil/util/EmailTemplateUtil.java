@@ -15,7 +15,7 @@ import com.markliu.emailutil.service.EmailServerService;
  * @auther SunnyMarkLiu
  * @time Apr 12, 2016 5:43:46 PM
  */
-public class SendEmailTemplate {
+public class EmailTemplateUtil {
 
 	/**
 	 * 发送邮件的模板方法

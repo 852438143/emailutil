@@ -10,7 +10,7 @@ import com.markliu.emailutil.entities.EmailInfo;
 import com.markliu.emailutil.entities.EmailServerHostAndPort;
 import com.markliu.emailutil.entities.EmailServerInfo;
 import com.markliu.emailutil.service.EmailServerService;
-import com.markliu.emailutil.util.SendEmailTemplate;
+import com.markliu.emailutil.util.EmailTemplateUtil;
 
 /**
  * 
@@ -59,7 +59,7 @@ public class SendEmailTest {
 		email.getAttachmentFiles().add("E:\\heartocat.png");
 		email.getAttachmentFiles().add("E:\\Music\\Alison Krauss - When You Say Nothing At All.mp3");
 		
-		SendEmailTemplate.sendEmail(emailServerInfo, email);
+		EmailTemplateUtil.sendEmail(emailServerInfo, email);
 	}
 	
 	@Test

@@ -7,7 +7,7 @@ import org.junit.Test;
 import com.markliu.emailutil.entities.EmailServerHostAndPort;
 import com.markliu.emailutil.entities.EmailServerInfo;
 import com.markliu.emailutil.entities.ReadEmailInfo;
-import com.markliu.emailutil.util.SendEmailTemplate;
+import com.markliu.emailutil.util.EmailTemplateUtil;
 
 /**
  * 
@@ -27,7 +27,7 @@ public class ReadEmailTest {
 		emailServerInfo.setPassword("xxxxxx"); // 注意使用的是开通 SMTP 协议的授权码
 		emailServerInfo.setMyEmailAddress("xxxxxx@163.com");		
 		
-		ReadEmailInfo emailInfo = SendEmailTemplate.getLatestOneEmailInfo(emailServerInfo);
+		ReadEmailInfo emailInfo = EmailTemplateUtil.getLatestOneEmailInfo(emailServerInfo);
 		System.out.println(emailInfo.toString());
 	}
 }

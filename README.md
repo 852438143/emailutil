@@ -16,7 +16,7 @@
 		emailServerInfo.setMyEmailAddress("xxxxxx@163.com");		
 		
 		// 读取最近的一份邮件
-		ReadEmailInfo emailInfo = SendEmailTemplate.getLatestOneEmailInfo(emailServerInfo);
+		ReadEmailInfo emailInfo = EmailTemplateUtil.getLatestOneEmailInfo(emailServerInfo);
 		System.out.println(emailInfo.toString());
 	}
 	
@@ -49,7 +49,7 @@
 		email.getAttachmentFiles().add("E:\\heartocat.png");
 		email.getAttachmentFiles().add("E:\\Music\\Alison Krauss - When You Say Nothing At All.mp3");
 		
-		SendEmailTemplate.sendEmail(emailServerInfo, email);
+		EmailTemplateUtil.sendEmail(emailServerInfo, email);
 	}
 
 ## Forwarding Emails
