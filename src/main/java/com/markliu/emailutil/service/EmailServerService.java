@@ -87,15 +87,17 @@ public class EmailServerService {
 		properties.put("mail.smtp.port", EmailServerHostAndPort.SMTP_PORT);
 		Session session = Session.getDefaultInstance(properties);
 		
+		Store store = null;
+		Folder folder = null;
 		try {
 			// Get a Store object and connect to the current host
-			Store store = session.getStore("pop3s");
+			store = session.getStore("pop3s");
 			store.connect(emailServerInfo.getMailServerPOP3Host(),
 					emailServerInfo.getMyEmailAddress(),
 					emailServerInfo.getPassword());// change the user and
 													// password accordingly
 
-			Folder folder = store.getFolder("INBOX");
+			folder = store.getFolder("INBOX");
 			folder.open(Folder.READ_ONLY);
 
 			Message message = folder.getMessage(msgnum);
@@ -135,19 +137,32 @@ public class EmailServerService {
 				t.connect(emailServerInfo.getMyEmailAddress(),
 						emailServerInfo.getPassword());
 				t.sendMessage(replyMessage, replyMessage.getAllRecipients());
+				return true;
 			} finally {
 				t.close();
 			}
 
-			// close the store and folder objects
-			folder.close(false);
-			store.close();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			// close the store and folder objects
+			if (folder != null) {
+				try {
+					folder.close(false);
+				} catch (MessagingException e) {
+					e.printStackTrace();
+				}
+			}
+			if (store != null) {
+				try {
+					store.close();
+				} catch (MessagingException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-		return true;
+		
 	}
 	
 	/**
