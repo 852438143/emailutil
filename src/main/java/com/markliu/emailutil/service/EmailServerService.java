@@ -28,7 +28,6 @@ import javax.mail.internet.MimeMultipart;
 import com.markliu.emailutil.entities.EmailInfo;
 import com.markliu.emailutil.entities.EmailServerHostAndPort;
 import com.markliu.emailutil.entities.EmailServerInfo;
-import com.markliu.emailutil.entities.ReadEmailInfo;
 import com.markliu.emailutil.util.FetchingEmailUtil;
 
 /**
@@ -451,8 +450,8 @@ public class EmailServerService {
 	 * @param emailServerInfo
 	 * @return
 	 */
-	public ReadEmailInfo getLatestOneEmailFromStore(Session sendMailSession, EmailServerInfo emailServerInfo) {
-		ReadEmailInfo emailInfo = null;
+	public EmailInfo getLatestOneEmailFromStore(Session sendMailSession, EmailServerInfo emailServerInfo) {
+		EmailInfo emailInfo = null;
 		Store store = null;
         try {
             store = sendMailSession.getStore("pop3");
@@ -484,9 +483,9 @@ public class EmailServerService {
 	 * @param emailServerInfo
 	 * @return
 	 */
-	public List<ReadEmailInfo> readAllEmailInfos(Session sendMailSession, EmailServerInfo emailServerInfo) {
+	public List<EmailInfo> readAllEmailInfos(Session sendMailSession, EmailServerInfo emailServerInfo) {
 		
-		List<ReadEmailInfo> allEmailInfos = null;
+		List<EmailInfo> allEmailInfos = null;
 		Store store = null;
         try {
             store = sendMailSession.getStore("pop3");

@@ -21,7 +21,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
 
-import com.markliu.emailutil.entities.ReadEmailInfo;
+import com.markliu.emailutil.entities.EmailInfo;
 
 /**
  * 
@@ -34,8 +34,8 @@ public class FetchingEmailUtil {
 	private final static String SAVE_ATTACHMENTS_PATH = "E:\\email_attachments\\temp\\";
 	
 	
-	public List<ReadEmailInfo> fetchingAllEmailInfos(Store store, boolean closeFolder) throws Exception {
-		List<ReadEmailInfo> emailInfos = new ArrayList<ReadEmailInfo>();
+	public List<EmailInfo> fetchingAllEmailInfos(Store store, boolean closeFolder) throws Exception {
+		List<EmailInfo> emailInfos = new ArrayList<EmailInfo>();
 		
 		// create the folder object and open it
 		Folder emailFolder = store.getFolder("INBOX");
@@ -44,7 +44,7 @@ public class FetchingEmailUtil {
 		// retrieve all messages from the folder in an array 
 		Message[] messages = emailFolder.getMessages();
 		for (Message message : messages) {
-			ReadEmailInfo emailInfo = new ReadEmailInfo();
+			EmailInfo emailInfo = new EmailInfo();
 			writePart(message, emailInfo);
 			emailInfos.add(emailInfo);
 		}
@@ -58,8 +58,8 @@ public class FetchingEmailUtil {
 	 * @return
 	 * @throws Exception 
 	 */
-	public ReadEmailInfo fetchingLatestEmailFromStore(Store store, boolean closeFolder) throws Exception {
-		ReadEmailInfo emailInfo = new ReadEmailInfo();
+	public EmailInfo fetchingLatestEmailFromStore(Store store, boolean closeFolder) throws Exception {
+		EmailInfo emailInfo = new EmailInfo();
 		
 		// create the folder object and open it
 		Folder emailFolder = store.getFolder("INBOX");
@@ -79,7 +79,7 @@ public class FetchingEmailUtil {
 	 * This method checks for content-type based on which, it processes and
 	 * fetches the content of the message
 	 */
-	private void writePart(Part p, ReadEmailInfo emailInfo) throws Exception {
+	private void writePart(Part p, EmailInfo emailInfo) throws Exception {
 		if (p instanceof Message)
 			// Call methos writeEnvelope
 			writeEnvelope((Message) p, emailInfo);
@@ -168,7 +168,7 @@ public class FetchingEmailUtil {
 	/*
 	 * This method would print FROM,TO and SUBJECT of the message
 	 */
-	private static void writeEnvelope(Message m, ReadEmailInfo emailInfo) throws Exception {
+	private static void writeEnvelope(Message m, EmailInfo emailInfo) throws Exception {
 		System.out.println("------------HEADER---------------");
 		Address[] a;
 

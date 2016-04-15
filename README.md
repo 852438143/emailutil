@@ -27,6 +27,8 @@
 		
 		// 读取最近的一份邮件
 		ReadEmailInfo emailInfo = EmailTemplateUtil.getLatestOneEmailInfo(emailServerInfo);
+		// 获取所有邮件
+		// List<EmailInfo> emailInfos = EmailTemplateUtil.getAllEmailInfos(emailServerInfo);
 		System.out.println(emailInfo.toString());
 	}
 	
@@ -41,7 +43,8 @@
 		// 构建邮件 email
 		EmailInfo email = new EmailInfo();
 		String[] toes = {"xxxxxx@qq.com", "xxxxxx@qq.com"}; // change accordingly
-		email.setToAddress(toes).setSubject("test 主题2");
+		email.setToAddress(toes);
+		email.setSubject("test 主题2");
 		
 		StringBuffer content = new StringBuffer();
 		

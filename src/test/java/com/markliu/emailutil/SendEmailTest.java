@@ -28,7 +28,8 @@ public class SendEmailTest {
 		// 构建邮件 email
 		EmailInfo email = new EmailInfo();
 		String[] toes = {"xxxxxx@qq.com", "xxxxxx@qq.com"};
-		email.setToAddress(toes).setSubject("test 主题2");
+		email.setToAddress(toes);
+		email.setSubject("test 主题2");
 		
 		StringBuffer content = new StringBuffer();
 		
@@ -72,8 +73,9 @@ public class SendEmailTest {
 			// 构建邮件 email
 			EmailInfo email = new EmailInfo();
 			String[] toes = {"xxxxxx@qq.com", "xxxxxx@qq.com"};
-			email.setToAddress(toes).setSubject("test 主题2")
-					.setContent("this is content内容!");
+			email.setToAddress(toes);
+			email.setSubject("test 主题2");
+			email.setContent("this is content内容!");
 			boolean result = emailServerService.sendEmail(sendMailSession, emailServerInfo, email);
 			if (result) {
 				System.out.println("发送成功！");

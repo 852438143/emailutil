@@ -6,7 +6,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.markliu.emailutil.entities.EmailServerInfo;
-import com.markliu.emailutil.entities.ReadEmailInfo;
+import com.markliu.emailutil.entities.EmailInfo;
 import com.markliu.emailutil.util.EmailTemplateUtil;
 
 /**
@@ -23,9 +23,9 @@ public class ReadEmailTest {
 		// 获取配置的登陆邮件服务器的信息
 		EmailServerInfo emailServerInfo = EmailTemplateUtil.getConfigEmailServerInfo();
 		
-		List<ReadEmailInfo> emailInfos = EmailTemplateUtil.getAllEmailInfos(emailServerInfo);
+		List<EmailInfo> emailInfos = EmailTemplateUtil.getAllEmailInfos(emailServerInfo);
 		System.out.println("邮件数目：" + emailInfos.size());
-		for (ReadEmailInfo emailInfo : emailInfos) {
+		for (EmailInfo emailInfo : emailInfos) {
 			System.out.println(emailInfo.toString());
 		}
 	}
@@ -36,7 +36,7 @@ public class ReadEmailTest {
 		// 获取配置的登陆邮件服务器的信息
 		EmailServerInfo emailServerInfo = EmailTemplateUtil.getConfigEmailServerInfo();
 		
-		ReadEmailInfo emailInfo = EmailTemplateUtil.getLatestOneEmailInfo(emailServerInfo);
+		EmailInfo emailInfo = EmailTemplateUtil.getLatestOneEmailInfo(emailServerInfo);
 		System.out.println(emailInfo.toString());
 	}
 }

@@ -19,7 +19,7 @@ public class DeleteEmailTest {
 		// 获取配置的登陆邮件服务器的信息
 		EmailServerInfo emailServerInfo = EmailTemplateUtil.getConfigEmailServerInfo();
 		
-		if (EmailTemplateUtil.deleteEmailByMsgNum(emailServerInfo, 59)) {
+		if (EmailTemplateUtil.deleteEmailByMsgNum(emailServerInfo, 43)) {
 			System.out.println("删除成功！");
 		} else {
 			System.out.println("删除失败！");

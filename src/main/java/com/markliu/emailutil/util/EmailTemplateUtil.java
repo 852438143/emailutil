@@ -6,7 +6,6 @@ import javax.mail.Session;
 
 import com.markliu.emailutil.entities.EmailInfo;
 import com.markliu.emailutil.entities.EmailServerInfo;
-import com.markliu.emailutil.entities.ReadEmailInfo;
 import com.markliu.emailutil.service.EmailServerService;
 
 /**
@@ -86,14 +85,14 @@ public class EmailTemplateUtil {
 	 * @param emailServerInfo
 	 * @return
 	 */
-	public static List<ReadEmailInfo> getAllEmailInfos(EmailServerInfo emailServerInfo) {
+	public static List<EmailInfo> getAllEmailInfos(EmailServerInfo emailServerInfo) {
 		// 如果登陆成功，则进行发送邮件
 		
 		Session sendMailSession = emailServerService.loginEmailServer(emailServerInfo, true);
 		if (sendMailSession != null) {
 			System.out.println(emailServerInfo.getMailServerPOP3Host() + " 登陆成功！");
 			System.out.println("正在读取邮件...");
-			List<ReadEmailInfo> emailInfos = emailServerService.readAllEmailInfos(sendMailSession, emailServerInfo);
+			List<EmailInfo> emailInfos = emailServerService.readAllEmailInfos(sendMailSession, emailServerInfo);
 			return emailInfos;
 		} else {
 			System.out.println(emailServerInfo.getMailServerPOP3Host() + " 登陆失败！");
@@ -107,14 +106,14 @@ public class EmailTemplateUtil {
 	 * @param emailServerInfo
 	 * @return
 	 */
-	public static ReadEmailInfo getLatestOneEmailInfo(EmailServerInfo emailServerInfo) {
+	public static EmailInfo getLatestOneEmailInfo(EmailServerInfo emailServerInfo) {
 		// 如果登陆成功，则进行发送邮件
 		
 		Session sendMailSession = emailServerService.loginEmailServer(emailServerInfo, true);
 		if (sendMailSession != null) {
 			System.out.println(emailServerInfo.getMailServerPOP3Host() + " 登陆成功！");
 			System.out.println("正在读取邮件...");
-			ReadEmailInfo emailInfo = emailServerService.getLatestOneEmailFromStore(sendMailSession, emailServerInfo);
+			EmailInfo emailInfo = emailServerService.getLatestOneEmailFromStore(sendMailSession, emailServerInfo);
 			return emailInfo;
 		} else {
 			System.out.println(emailServerInfo.getMailServerPOP3Host() + " 登陆失败！");
