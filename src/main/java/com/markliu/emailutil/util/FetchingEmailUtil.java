@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.mail.Address;
-import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.Multipart;
@@ -236,18 +235,25 @@ public class FetchingEmailUtil {
 		}
 
 		// 判断邮件是否已读
-		boolean isNew = false;
-		Flags flags = m.getFlags();
-		Flags.Flag[] flag = flags.getSystemFlags();
-		System.out.println("flags的长度:　" + flag.length);
-		for (int i = 0; i < flag.length; i++) {
-			if (flag[i] == Flags.Flag.SEEN) {
-				isNew = true;
-				System.out.println("seen email...");
-				// break;
-			}
-		}
-		emailInfo.setReaded(isNew);
+//		boolean isNew = false;
+//		Flags flags = m.getFlags();
+//		Flags.Flag[] flag = flags.getSystemFlags();
+//		System.out.println("flags的长度:　" + flag.length);
+//		for (int i = 0; i < flag.length; i++) {
+//			if (flag[i] == Flags.Flag.SEEN) {
+//				isNew = true;
+//				System.out.println("seen email...");
+//				// break;
+//			}
+//		}
+//		emailInfo.setReaded(isNew);
+		/*
+		 * This message is seen. This flag is implicitly set by the
+		 * implementation when the this Message's content is returned to the
+		 * client in some form. The getInputStream and getContent methods on
+		 * Message cause this flag to be set.
+		 */
+		emailInfo.setReaded(false);
 		
 		// 判断是否需要回执
 		boolean needReply = m.getHeader("Disposition-Notification-To") != null ? true : false;
